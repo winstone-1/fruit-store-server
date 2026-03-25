@@ -1,22 +1,35 @@
 import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import Fruit from './models/Fruit.js';
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-const fruits = [
-    { id: 1, name: 'Apple', price: 0.5 },
-    { id: 2, name: 'Banana', price: 0.3 },
-    { id: 3, name: 'Orange', price: 0.8 },
-    { id: 4, name: 'Grapes', price: 2.0 },
-];
-
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Fruit Store API' });
 });
 
 app.get('/api/fruits', (req, res) => {
-  res.json(fruits);
+  Fruit.find()
+    .then((fruits) => {
+      res.json(fruits);
+    })
+    .catch((error) => {
+      console.error('Error fetching fruits:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 });
 
 app.listen(PORT, () => {
