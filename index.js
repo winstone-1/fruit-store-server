@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Fruit Store API' });
 });
 
-app.get('/fruits', (req, res) => {
+app.get('/api/fruits', (req, res) => {
   res.json(fruits);
 });
 
