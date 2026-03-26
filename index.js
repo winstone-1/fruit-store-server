@@ -1,21 +1,15 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Fruit from './models/Fruit.js';
+import connectDB from './config/db.js';
 
 dotenv.config();
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose.connect(MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-  });
+
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Fruit Store API' });
